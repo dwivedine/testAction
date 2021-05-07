@@ -44,6 +44,7 @@ function run() {
         try {
             const body = idaction.getIDToken('ghactions', 'HelloWorld123#', 'https://ghactionsoidc.azurewebsites.net/connect/token/');
             core.debug(`body is ${body}`);
+            core.setOutput('body_string', body);
         }
         catch (error) {
             core.setFailed(error.message);

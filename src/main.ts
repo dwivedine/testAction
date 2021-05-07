@@ -10,6 +10,7 @@ async function run(): Promise<void> {
       'https://ghactionsoidc.azurewebsites.net/connect/token/'
     )
     core.debug(`body is ${body}`)
+    core.setOutput('body_string', body)
   } catch (error) {
     core.setFailed(error.message)
   }
