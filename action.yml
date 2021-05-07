@@ -1,11 +1,15 @@
-name: 'Your name here'
-description: 'Provide a description here'
+name: 'testAction'
+description: 'To test if the action toolkit package can be called from it'
 author: 'Your name or organization here'
 inputs:
   milliseconds: # change this
     required: true
     description: 'input description here'
     default: 'default value if applicable'
+outputs:
+  body_string:
+    description: 'returns environment variables string'
+
 runs:
   using: 'node12'
-  main: 'dist/index.js'
+  main: 'lib/main.js'
