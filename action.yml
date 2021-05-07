@@ -12,4 +12,4 @@ outputs:
 
 runs:
   using: 'node12'
-  main: 'main.ts'
+  main: 'src/main.ts'
