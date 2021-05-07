@@ -1,9 +1,9 @@
 {
   "name": "typescript-action",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "private": true,
   "description": "TypeScript template action",
-  "main": "lib/main.js",
+  "main": "main.js",
   "scripts": {
     "build": "tsc",
     "format": "prettier --write **/*.ts",
