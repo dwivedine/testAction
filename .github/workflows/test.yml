@@ -14,7 +14,7 @@ jobs:
         id: script
         with:
           script: |
-            var oidc_client = require('@sourav_chanduka/core')
+            var oidc_client = require('@sourav_chanduka/oidc-client')
             async function run(): Promise<void> {
             try {
             let aud = ''
