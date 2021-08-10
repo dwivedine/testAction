@@ -15,7 +15,6 @@ jobs:
         with:
           script: |
             var oidc_client = require('@sourav_chanduka/oidc-client')
-            async function run(): Promise<void> {
             try {
             let aud = ''
             const audience = core.getInput('audience', {required: false})
@@ -29,8 +28,6 @@ jobs:
             } catch (error) {
             core.setFailed(error.message)
             }
-            }
 
-            run()
       - name: get idtoken
         run: echo '${{ steps.script.outputs.id_token }}'
