@@ -10,15 +10,27 @@ jobs:
   build: # make sure build/ci work properly
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
-      - run: |
-          npm install
-      - run: |
-          npm run all
-  test: # make sure the action works on a clean machine without building
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-      - uses: ./
+      - uses: actions/github-script@v4
+        id: script
         with:
-          milliseconds: 1000
+          script: |
+            var oidc_client = require('@sourav_chanduka/core')
+            async function run(): Promise<void> {
+            try {
+            let aud = ''
+            const audience = core.getInput('audience', {required: false})
+            if (audience !== undefined) 
+              aud = `${audience}`
+    
+            const id_token = await oidc_client.getIDToken(aud)
+
+            core.setOutput('id_token', id_token)
+
+            } catch (error) {
+            core.setFailed(error.message)
+            }
+            }
+
+            run()
+      - name: get idtoken
+        run: echo '${{ steps.script.outputs.id_token }}'
