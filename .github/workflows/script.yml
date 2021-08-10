@@ -1,0 +1,30 @@
+name: 'script check'
+on: # rebuild any PRs and main branch changes
+  pull_request:
+  push:
+    branches:
+      - main
+      - 'releases/*'
+
+jobs:
+  build: # make sure build/ci work properly
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/github-script@v4
+        id: script
+        with:
+          script: |
+            const artifact = require('@actions/artifact');
+            const artifactClient = artifact.create()
+            const artifactName = 'my-artifact';
+            const files = [
+            '/home/user/files/plz-upload/file1.txt',
+            '/home/user/files/plz-upload/file2.txt',
+            '/home/user/files/plz-upload/dir/file3.txt'
+            ]
+            const rootDirectory = '/home/user/files/plz-upload'
+            const options = {
+              continueOnError: true
+            }
+
+            const uploadResult = await artifactClient.uploadArtifact(artifactName, files, rootDirectory, options)
