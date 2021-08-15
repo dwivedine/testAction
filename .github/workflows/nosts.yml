@@ -1,0 +1,55 @@
+name: NO sps
+env:
+  BUCKET_NAME : "neha-bucket123"
+  APP_NAME : "neha-app"
+  ENV_NAME : "Nehaapp-env"
+  PACKAGE_NAME : "neha-1.zip"
+  AWS_REGION : "us-east-2"
+  
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  S3PackageUpload:
+    permissions:
+      contents: write
+      id-token: read
+    runs-on: ubuntu-latest
+
+    steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE
+      - uses: actions/checkout@v2
+
+      # Runs a single command using the runners shell
+      - name: Create zip
+        run: zip -r ${{ env.PACKAGE_NAME }} ./ -x "*.git"
+     
+      - name: Create zip2
+        run: zip -r neha-2.zip ./ -x "*.git"
+        
+      
+      - name: store id token in file
+        run: echo eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsIng1dCI6Imlmb2lQTVA1ZlVaUFBkUnV4WXVPbklNUHVEcyIsImtpZCI6Ijg5RkEyMjNDQzNGOTdENDY0RjNERDQ2RUM1OEI4RTlDODMwRkI4M0IifQ.eyJqdGkiOiJhZTg4ZWIwOS1hNTBjLTQyZDUtYWVkZi03NTE1ODE0Y2E0OGEiLCJzdWIiOiJSZXBvOmdpdGh1Yi9zZGZnOlJlZjpyZWZzL2hlYWRzL21haW4iLCJpc3MiOiJodHRwczovLzExMjIzMy5uZ3Jvay5pbyIsImF1ZCI6ImdpdGh1Yi5jb20iLCJuYmYiOjE2MjkwNDk3OTAsImV4cCI6MTYyOTEzMzE5MCwiaWF0IjoxNjI5MDUwMzkwfQ.cdMbhSSzzxi-UkigiXLc6scqCj_Zk41p1vsJyY0TnqQtQeIrFNaqa5GEDNNcIOH_2DRL43fSow5oHsCabDCTUXvY2if4UZ65pcuiIo9GPcyYdNq7XePIwB6KdPp-3-KKEr0G4xQVZDcRwsuJWFeBuwEpAy02_vesp94nseqTGOhmxEhESYtbQLt8Q2jcJEOk6h0lEohcxZF1SLP8EYY-hP1AWQUSTj75QMGZgd6pQlhUhsV5p_v2QX_aHH1tKXckvwgkWJ651hTySgDG4wFrGjvuQF0C_Y6p1W9La6vJzjk487JefRQWeTpipJnhtDyi0zZ0KZhbh-7jW-qDuvJskQ   >idtoken.txt
+         
+ 
+
+      - name:  Copy package to s3
+        run: aws s3 cp ${{ env.PACKAGE_NAME }} s3://${{ env.BUCKET_NAME }}/
+        env:
+          AWS_ROLE_ARN: arn:aws:iam::151347512159:role/news3role
+          AWS_WEB_IDENTITY_TOKEN_FILE: idtoken.txt
+          
+        
+      - name: Sleep for 30 seconds
+        uses: whatnick/wait-action@master
+        with:
+          time: '3700s'
+          
+          
+     
+          
+      - name:  Copy package to s3
+        run: echo ::set-output name=RESULT::$(aws s3 cp neha-2.zip s3://${{ env.BUCKET_NAME }}/ )
+        id: copy
